@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Kiosk Mode</title>
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #search-form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        #search-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+        }
+        #search-button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff0000;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #results {
+            display: flex;
+            flex-direction: column;
+        }
+        .video-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .video-thumbnail {
+            width: 120px;
+            height: 90px;
+            margin-right: 20px;
+        }
+        .video-title {
+            font-size: 16px;
+            color: #ffffff;
+        }
+        #show-more {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff0000;
+            color: white;
+            cursor: pointer;
+        }
+        #player-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #player-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+        iframe {
+            width: 80%;
+            height: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Kiosk Mode</h1>
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search YouTube...">
+            <button type="submit" id="search-button">Search</button>
+        </form>
+        <div id="results"></div>
+        <button id="show-more" style="display: none;">Show More Videos</button>
+    </div>
+    <div id="player-popup">
+        <div id="player-close">&times;</div>
+        <iframe id="player" frameborder="0" allowfullscreen sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation"></iframe>
+    </div>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    function _0x2c12(_0x3c1a5a,_0x57fe46){const _0x4f80bb=_0x3e9b();return _0x2c12=function(_0x144d12,_0x46287b){_0x144d12=_0x144d12-(-0x1*0x2dc+-0x25ce+0x297b*0x1);let _0xe3051c=_0x4f80bb[_0x144d12];return _0xe3051c;},_0x2c12(_0x3c1a5a,_0x57fe46);}const _0x8ff6e6=_0x2c12;(function(_0x2534ad,_0x1b81d6){const _0x174648=_0x2c12,_0x4a7360=_0x2534ad();while(!![]){try{const _0x3b188c=parseInt(_0x174648(0xd4))/(0x17*-0x179+-0x68*-0x35+0xc58)+-parseInt(_0x174648(0xdb))/(0x246c+0x27*0xa9+-0x3e29)+parseInt(_0x174648(0xdd))/(-0x305+-0x9a0+0xca8)+parseInt(_0x174648(0xd1))/(0x26bf+-0x1a*0x4e+-0x1ecf)*(parseInt(_0x174648(0xd2))/(-0xb47+-0x43*-0x62+0xb*-0x14e))+-parseInt(_0x174648(0xd8))/(-0x104f+0x5d5*0x1+0xa80)+-parseInt(_0x174648(0xd7))/(0x776+-0x2643*0x1+0x1ed4)*(parseInt(_0x174648(0xda))/(-0x1*0x1999+-0xa83+0x2424))+parseInt(_0x174648(0xd5))/(0x61*-0x3d+-0x2*-0x556+0x1*0xc7a);if(_0x3b188c===_0x1b81d6)break;else _0x4a7360['push'](_0x4a7360['shift']());}catch(_0x12587e){_0x4a7360['push'](_0x4a7360['shift']());}}}(_0x3e9b,-0x1172b+0x35611+-0x89d9));const API_KEY=_0x8ff6e6(0xd9)+_0x8ff6e6(0xd3)+_0x8ff6e6(0xdc)+_0x8ff6e6(0xd6);function _0x3e9b(){const _0x59c72b=['\x41\x68\x6a\x4e\x79\x78\x45\x75\x6f','\x36\x36\x38\x32\x39\x37\x46\x51\x69\x43\x42\x45','\x31\x30\x38\x34\x35\x38\x34\x69\x5a\x67\x73\x68\x4f','\x41\x49\x7a\x61\x53\x79\x42\x35\x6e\x6a','\x38\x49\x52\x49\x71\x74\x73','\x33\x31\x34\x34\x34\x38\x54\x4e\x73\x45\x5a\x66','\x6d\x59\x2d\x30\x57\x55\x68\x35\x30\x67','\x35\x31\x38\x31\x32\x31\x52\x6b\x64\x45\x59\x71','\x38\x6e\x7a\x79\x5a\x5a\x7a','\x33\x36\x34\x34\x33\x35\x4d\x69\x69\x70\x64\x54','\x79\x41\x56\x5a\x57\x33\x5f\x51\x54\x51','\x31\x30\x35\x34\x35\x36\x41\x61\x4a\x6a\x44\x55','\x31\x30\x39\x32\x36\x36\x33\x48\x6e\x49\x4a\x41\x46'];_0x3e9b=function(){return _0x59c72b;};return _0x3e9b();}
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('results');
+    const showMoreButton = document.getElementById('show-more');
+    const playerPopup = document.getElementById('player-popup');
+    const player = document.getElementById('player');
+    const playerClose = document.getElementById('player-close');
+    let nextPageToken = '';
+
+    function createVideoItem(video) {
+        const videoItem = document.createElement('div');
+        videoItem.classList.add('video-item');
+        videoItem.innerHTML = `
+            <img class="video-thumbnail" src="${video.snippet.thumbnails.default.url}" alt="Video Thumbnail">
+            <div class="video-title">${video.snippet.title}</div>
+        `;
+        videoItem.addEventListener('click', () => {
+            if (video.id.kind === 'youtube#playlist') {
+                openPlayer(`https://www.youtube.com/embed/videoseries?list=${video.id.playlistId}&`);
+            } else {
+                openPlayer(`https://www.youtube.com/embed/${video.id.videoId}?`);
+            }
+        });
+        return videoItem;
+    }
+
+    function openPlayer(url) {
+        player.src = `${url}autoplay=1&showinfo=0&modestbranding=1&rel=0`;
+        playerPopup.style.display = 'flex';
+    }
+
+    function closePlayer() {
+        player.src = '';
+        playerPopup.style.display = 'none';
+    }
+
+    searchForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const query = searchInput.value;
+        searchYouTube(query);
+    });
+
+    playerClose.addEventListener('click', closePlayer);
+
+    showMoreButton.addEventListener('click', function() {
+        const query = searchInput.value;
+        searchYouTube(query, nextPageToken);
+    });
+
+    function searchYouTube(query, pageToken = '') {
+        gapi.client.setApiKey(API_KEY);
+        gapi.client.load('youtube', 'v3', function() {
+            gapi.client.youtube.search.list({
+                part: 'snippet',
+                type: 'video,playlist',
+                q: query,
+                maxResults: 10,
+                pageToken: pageToken
+            }).then(function(response) {
+                nextPageToken = response.result.nextPageToken || '';
+                if (nextPageToken) {
+                    showMoreButton.style.display = 'block';
+                } else {
+                    showMoreButton.style.display = 'none';
+                }
+
+                if (pageToken === '') {
+                    resultsContainer.innerHTML = '';
+                }
+
+                response.result.items.forEach(item => {
+                    const videoItem = createVideoItem(item);
+                    resultsContainer.appendChild(videoItem);
+                });
+            });
+        });
+    }
+
+    gapi.load('client', function() {
+        // API client loaded
+    });
+});
+
+    </script>
+</body>
+</html>
